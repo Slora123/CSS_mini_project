@@ -29,6 +29,8 @@ export default function SimulationSection() {
   // Step 3: HMAC Calculation Sub-Steps
   const ipadConst = '01011100'; // 8-bit ipad constant
   const opadConst = '00110110'; // 8-bit opad constant
+  const ipad = ipadConst;
+  const opad = opadConst;
   
   const [userKipad, setUserKipad] = useState('');
   const [kipadFeedback, setKipadFeedback] = useState(null);
@@ -515,9 +517,9 @@ export default function SimulationSection() {
             <div className="vlab-info-box" style={{ fontStyle: 'normal' }}>
               <strong>HMAC follows this process:</strong>
               <ol style={{ paddingLeft: '20px', marginTop: '6px' }}>
-                <li><code>ipad = {ipadConst}, opad = {opadConst}</code></li>
-                <li><code>Inner hash: H(IV || (k ⊕ ipad) || padded_message || length)</code></li>
-                <li><code>Outer hash: H(IV || (k ⊕ opad) || inner_hash_result)</code></li>
+                <li><code>{"ipad = 01011100, opad = 00110110"}</code></li>
+                <li><code>{"Inner hash: H(IV || (k ⊕ ipad) || padded_message || length)"}</code></li>
+                <li><code>{"Outer hash: H(IV || (k ⊕ opad) || inner_hash_result)"}</code></li>
               </ol>
             </div>
 
