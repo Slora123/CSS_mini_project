@@ -1,55 +1,55 @@
 import React, { useState } from 'react';
-import { FileCheck, CheckCircle2, XCircle, Award } from 'lucide-react';
+import { FileCheck, Award } from 'lucide-react';
 
 export default function AssignmentSection() {
   const questions = [
     {
       id: 1,
-      q: 'What cryptographic property does a Message Authentication Code (MAC) guarantee?',
+      q: 'What cryptographic guarantee does a Message Authentication Code (MAC) provide?',
       options: [
-        'A. Confidentiality only',
-        'B. Data Origin Authentication and Data Integrity',
-        'C. Non-repudiation and Public-key Encryption',
-        'D. Key distribution security'
+        'A. Confidentiality of plaintext messages',
+        'B. Data Integrity and Origin Authentication',
+        'C. Non-repudiation and Public-key Signatures',
+        'D. Key Exchange Protocol'
       ],
       correct: 1,
-      explanation: 'MAC algorithms use a shared secret key to provide both data integrity (detecting tampering) and origin authentication (confirming sender identity).'
+      explanation: 'A MAC tag guarantees both data integrity (detecting alterations) and origin authentication (verifying sender identity).'
     },
     {
       id: 2,
-      q: 'In HMAC construction (RFC 2104), what are the byte constants for ipad and opad?',
+      q: 'In CBC-MAC, how are message blocks chained together?',
       options: [
-        'A. ipad = 0xAA, opad = 0x55',
-        'B. ipad = 0x00, opad = 0xFF',
-        'C. ipad = 0x36, opad = 0x5C',
-        'D. ipad = 0x12, opad = 0x34'
+        'A. Each block is encrypted independently',
+        'B. Each block is XORed with the previous cipher block before encryption',
+        'C. Each block is hashed using SHA-1',
+        'D. Each block is encrypted with a different secret key'
       ],
-      correct: 2,
-      explanation: 'RFC 2104 defines inner pad ipad = 0x36 repeated B times, and outer pad opad = 0x5C repeated B times.'
+      correct: 1,
+      explanation: 'CBC-MAC uses Cipher Block Chaining where T_i = E_K(P_i XOR T_{i-1}).'
     },
     {
       id: 3,
-      q: 'Why is plain hash H(M) insufficient for message authentication?',
+      q: 'How does NIST CMAC (NIST SP 800-38B) improve security over raw CBC-MAC?',
       options: [
-        'A. Plain hash is too slow',
-        'B. Anyone can recompute H(M\') for an altered message M\' since no key is involved',
-        'C. Hash functions are not deterministic',
-        'D. Plain hashes only work on ASCII characters'
+        'A. By using two derived subkeys (K1 and K2) for the final block',
+        'B. By compressing the key size to 64 bits',
+        'C. By removing the block cipher',
+        'D. By making the output non-deterministic'
       ],
-      correct: 1,
-      explanation: 'Without a secret key, an attacker can modify the message payload M to M\' and calculate H(M\'), fooling the receiver.'
+      correct: 0,
+      explanation: 'CMAC derives subkeys K1 and K2 using finite field multiplication to prevent length extension attacks on variable-length messages.'
     },
     {
       id: 4,
-      q: 'Why must MAC tag verification use constant-time byte comparison (e.g., MessageDigest.isEqual)?',
+      q: 'Why must MAC verification use constant-time byte comparison (e.g. MessageDigest.isEqual)?',
       options: [
-        'A. To speed up execution on multi-core processors',
-        'B. To prevent timing-attack side-channel vulnerabilities',
-        'C. To save memory bandwidth',
+        'A. To speed up multi-core processing',
+        'B. To prevent timing side-channel attacks',
+        'C. To save memory overhead',
         'D. Because Java strings are immutable'
       ],
       correct: 1,
-      explanation: 'Standard string comparisons exit early on the first mismatched byte, allowing attackers to guess MAC tags byte-by-byte by measuring response times.'
+      explanation: 'Standard string comparisons return early on mismatched bytes, allowing attackers to guess MAC tags byte-by-byte via timing measurements.'
     }
   ];
 
@@ -74,7 +74,7 @@ export default function AssignmentSection() {
     <div>
       <div className="section-header">
         <h2 className="section-title">Self-Assessment Quiz & Assignment</h2>
-        <p className="section-subtitle">Test your understanding of Cryptographic Message Authentication Codes</p>
+        <p className="section-subtitle">Test your knowledge of Message Authentication Codes (MAC)</p>
       </div>
 
       <div className="vlab-card">
@@ -144,10 +144,10 @@ export default function AssignmentSection() {
           <div style={{ background: '#f0f9ff', padding: '20px', borderRadius: '10px', border: '1px solid #bae6fd', textAlign: 'center' }}>
             <Award size={36} color="#0284c7" style={{ marginBottom: 8 }} />
             <h3 style={{ fontSize: '1.3rem', color: '#0369a1' }}>
-              Your Quiz Score: {score} / {questions.length} ({((score / questions.length) * 100).toFixed(0)}%)
+              Your Score: {score} / {questions.length} ({((score / questions.length) * 100).toFixed(0)}%)
             </h3>
             <p style={{ color: '#0c4a6e', marginTop: 4 }}>
-              {score === questions.length ? '🌟 Excellent! You have mastered MAC & HMAC cryptography principles!' : 'Good effort! Review the Theory section to improve your score.'}
+              {score === questions.length ? '🌟 Excellent! You have mastered MAC algorithms & block cipher chaining!' : 'Good effort! Review the Theory section to improve your score.'}
             </p>
           </div>
         )}

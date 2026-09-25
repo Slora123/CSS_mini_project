@@ -5,26 +5,26 @@ export default function ProcedureSection() {
   const steps = [
     {
       step: 'Step 1',
-      title: 'Generate or Input Shared Secret Key',
-      desc: 'Enter a custom secret key (e.g. "SecretKey123") or click "Auto-Generate 256-bit Key" in the Simulation tab.',
+      title: 'Configure Secret Key & Select MAC Algorithm',
+      desc: 'Enter a 128-bit secret key K (or click Auto-Generate) and choose your algorithm: CBC-MAC (AES-128), CMAC (NIST SP 800-38B), or General Keyed MAC.',
       icon: Key
     },
     {
       step: 'Step 2',
-      title: 'Compose Plaintext Message',
-      desc: 'Type the message payload (e.g. "Transfer $5000 to Account #8841") that requires integrity protection.',
+      title: 'Inspect Message Block Partitioning & Padding',
+      desc: 'Observe how the payload is split into 128-bit blocks (P1, P2, ... Pn) and padded using PKCS7 or 100... bit padding.',
       icon: Cpu
     },
     {
       step: 'Step 3',
-      title: 'Select Cryptographic Algorithm & Generate MAC',
-      desc: 'Choose your desired MAC algorithm (HmacSHA256, HmacSHA512, or HmacMD5) and click "Generate MAC Tag". The Java engine executes the HMAC routine and returns the hexadecimal MAC tag.',
+      title: 'Execute MAC Tag Generation C(K, M)',
+      desc: 'Click "Generate MAC Tag". The Java Security Engine executes block-by-block XOR encryption and produces the hexadecimal tag T.',
       icon: CheckCircle2
     },
     {
       step: 'Step 4',
-      title: 'Execute Verification & Simulate Attacks',
-      desc: 'Switch to the "MAC Verifier" tab to verify identical payload tags, or use the "Eve Attack Simulator" tab to introduce arbitrary bit modifications and test tamper detection.',
+      title: 'Constant-Time Verification & Active Tampering Simulation',
+      desc: 'Verify payload authenticity in constant-time or use the MITM Attack Simulator to modify message bits and test tamper detection.',
       icon: ShieldAlert
     }
   ];
@@ -33,7 +33,7 @@ export default function ProcedureSection() {
     <div>
       <div className="section-header">
         <h2 className="section-title">Experiment Procedure</h2>
-        <p className="section-subtitle">Follow these step-by-step instructions to execute the lab simulation</p>
+        <p className="section-subtitle">Follow these step-by-step instructions to execute the MAC simulation</p>
       </div>
 
       <div className="vlab-card">

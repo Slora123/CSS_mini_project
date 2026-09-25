@@ -1,26 +1,26 @@
 import React from 'react';
-import { Flag, CheckCircle, Lock, Zap, RefreshCw } from 'lucide-react';
+import { Flag, CheckCircle, Lock, Zap, Cpu } from 'lucide-react';
 
 export default function ObjectiveSection() {
   const objectives = [
     {
-      title: 'Understand Shared Secret Authentication',
-      desc: 'Learn how a shared symmetric secret key enables secure verification between sender and receiver without exposing plaintext keys.',
+      title: 'Master Symmetric Key MAC Tag Generation',
+      desc: 'Understand how a shared secret key K enables symmetric authentication tag generation C(K, M) -> T.',
       icon: Lock
     },
     {
-      title: 'Master HMAC Algorithms',
-      desc: 'Explore different hashing backends including HMAC-SHA256, HMAC-SHA512, and HMAC-MD5.',
+      title: 'Explore Block Cipher Chaining (CBC-MAC)',
+      desc: 'Visualize block-by-block AES encryption and XOR feedback chaining across message blocks.',
+      icon: Cpu
+    },
+    {
+      title: 'Analyze NIST CMAC Subkey Derivation',
+      desc: 'Learn how subkeys K1 and K2 protect against length extension and padding oracle vulnerabilities in CMAC.',
       icon: Zap
     },
     {
-      title: 'Simulate Real-Time Message Tampering',
-      desc: 'Observe how even a single bit change in the transmitted message or tag results in instant verification failure at the receiver.',
-      icon: RefreshCw
-    },
-    {
-      title: 'Analyze Cryptographic Execution Pipeline',
-      desc: 'Inspect the two-pass hashing steps (Inner Pad ipad XOR and Outer Pad opad XOR) executed by Java javax.crypto.Mac.',
+      title: 'Simulate Active Bit-Flip & Tamper Attacks',
+      desc: 'Observe how constant-time verification detects altered payload bits and invalid authentication tags.',
       icon: CheckCircle
     }
   ];
