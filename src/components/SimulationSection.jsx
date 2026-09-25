@@ -308,17 +308,17 @@ export default function SimulationSection() {
             {macResult.blocks && macResult.blocks.length > 0 && (
               <div>
                 <h4 style={{ color: '#0f172a', marginBottom: '12px', fontSize: '1rem', fontWeight: 700 }}>
-                  Block Chaining Execution Steps ($T_i = E_K(P_i \oplus T_{i-1})$):
+                  {"Block Chaining Execution Steps (T_i = E_K(P_i ⊕ T_{i-1})): "}
                 </h4>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {macResult.blocks.map((b) => (
                     <div key={b.index} style={{ background: '#0f172a', color: 'white', padding: '14px 18px', borderRadius: '8px', fontFamily: 'var(--font-code)', fontSize: '0.82rem' }}>
                       <div style={{ color: '#38bdf8', fontWeight: 700, marginBottom: 4 }}>
-                        Block #{b.index}: Plain Block ($P_{b.index}$)
+                        {"Block #" + b.index + ": Plain Block (P_" + b.index + ")"}
                       </div>
                       <div style={{ color: '#94a3b8' }}>Plain: {b.plainHex}</div>
                       <div style={{ color: '#fbbf24' }}>XOR Chained: {b.xorHex}</div>
-                      <div style={{ color: '#4ade80', fontWeight: 700 }}>Cipher Output ($T_{b.index}$): {b.encHex}</div>
+                      <div style={{ color: '#4ade80', fontWeight: 700 }}>{"Cipher Output (T_" + b.index + "): "}{b.encHex}</div>
                     </div>
                   ))}
                 </div>
