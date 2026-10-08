@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MAC - Generate and verify a Message Authentication Code (MAC) for a given message using a shared secret key.">
+    <title>Message Authentication Code (MAC) | Virtual Cryptography Laboratory</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="lab-experiment-container">
+        
+        <section id="objective" class="lab-section">
+            <span class="lab-section-tag">Objective</span>
+            <h1 class="lab-section-title">Message Authentication Code (MAC)</h1>
+            <p>The primary objective of this experiment is to implement, analyze, and verify a <strong>Message Authentication Code (MAC)</strong> for arbitrary messages using a shared secret key <code>K</code>. Students will explore how MAC provides data integrity and data origin authentication, and observe how an attacker who modifies the message but cannot forge a valid MAC is detected by the receiver.</p>
+        </section>
+
+        <section id="theory" class="lab-section">
+            <span class="lab-section-tag">Theory</span>
+            <h2 class="lab-section-title">Theory &amp; Concepts</h2>
+            <div class="lab-callout">
+                A Message Authentication Code (MAC) is a symmetric key cryptographic algorithm that takes an arbitrary-length message payload and a shared secret key, and produces a fixed-size authentication tag.
+            </div>
+            <p>Only parties who possess the secret key can compute or verify the tag. If an adversary modifies even 1 bit of the message but cannot recompute the MAC (because they don't have the key), the receiver's verification algorithm detects the tampering.</p>
+            <h3>Security Properties</h3>
+            <p>Unlike a simple Cryptographic Hash, a MAC requires a shared secret key, preventing attackers from regenerating a valid tag after tampering. Unlike Digital Signatures, MAC does not provide non-repudiation because both parties share the same key.</p>
+        </section>
+
+        <section id="procedure" class="lab-section">
+            <span class="lab-section-tag">Procedure</span>
+            <h2 class="lab-section-title">Algorithm Flow</h2>
+            <ol>
+                <li><strong>Sender Side:</strong> The sender enters a message and a secret key. The MAC algorithm generates a tag. The sender transmits the message appended with the MAC.</li>
+                <li><strong>Attacker (Man-in-the-Middle):</strong> An attacker intercepts the transmission, modifies the message, and must generate a forged MAC using a random key (since they don't know the secret key).</li>
+                <li><strong>Receiver Side:</strong> The receiver uses the shared secret key to compute the MAC on the received message. If it matches the received tag, it is authentic; otherwise, tampering is detected.</li>
+            </ol>
+            <svg viewBox="0 0 920 490" xmlns="http://www.w3.org/2000/svg" class="mac-flow-svg" aria-label="MAC Process Flow Diagram">
+                <defs>
+                  <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#3b82f6"/>
+                  </marker>
+                  <marker id="arrow-amber" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#f59e0b"/>
+                  </marker>
+                  <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981"/>
+                  </marker>
+                  <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#ef4444"/>
+                  </marker>
+                  <linearGradient id="bg-sender" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#1e293b"/>
+                    <stop offset="100%" stop-color="#0f172a"/>
+                  </linearGradient>
+                  <linearGradient id="bg-channel" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#2d261e"/>
+                    <stop offset="100%" stop-color="#1e1b18"/>
+                  </linearGradient>
+                  <linearGradient id="bg-receiver" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#162e2d"/>
+                    <stop offset="100%" stop-color="#0f1f1d"/>
+                  </linearGradient>
+                  <linearGradient id="btn-blue" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#2563eb"/>
+                    <stop offset="100%" stop-color="#1d4ed8"/>
+                  </linearGradient>
+                  <linearGradient id="btn-green" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#059669"/>
+                    <stop offset="100%" stop-color="#047857"/>
+                  </linearGradient>
+                </defs>
+
+                <rect x="20" y="20" width="270" height="450" rx="12" fill="url(#bg-sender)" stroke="#3b82f6" stroke-width="2"/>
+                <text x="155" y="48" fill="#60a5fa" font-size="15" font-weight="700" text-anchor="middle">1. Sender (MAC Generation)</text>
+                <rect x="40" y="70" width="230" height="42" rx="8" fill="#334155" stroke="#475569" stroke-width="1.5"/>
+                <text x="155" y="96" fill="#f8fafc" font-size="13" font-weight="600" text-anchor="middle">Plaintext Message (M)</text>
+                <rect x="40" y="130" width="230" height="42" rx="8" fill="#334155" stroke="#fbbf24" stroke-width="1.5"/>
+                <text x="155" y="156" fill="#fef08a" font-size="13" font-weight="600" text-anchor="middle">Shared Secret Key (K)</text>
+                <rect x="40" y="200" width="230" height="55" rx="8" fill="url(#btn-blue)" stroke="#60a5fa" stroke-width="1.5"/>
+                <text x="155" y="225" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">MAC Algorithm</text>
+                <text x="155" y="244" fill="#93c5fd" font-size="11" text-anchor="middle">T = HMAC-SHA256(K, M)</text>
+                <rect x="40" y="285" width="230" height="42" rx="8" fill="#1e3a8a" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="155" y="311" fill="#93c5fd" font-size="13" font-weight="600" text-anchor="middle">Generated MAC Tag (T)</text>
+                <rect x="40" y="380" width="230" height="52" rx="8" fill="#0f172a" stroke="#60a5fa" stroke-width="2" stroke-dasharray="4 4"/>
+                <text x="155" y="402" fill="#38bdf8" font-size="12" font-weight="700" text-anchor="middle">Transmitted Payload</text>
+                <text x="155" y="420" fill="#f8fafc" font-size="13" font-weight="600" text-anchor="middle">M || T (Message + Tag)</text>
+                <path d="M 155 112 L 155 200" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrow-blue)"/>
+                <path d="M 155 172 L 155 200" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrow-amber)"/>
+                <path d="M 155 255 L 155 285" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrow-blue)"/>
+                <path d="M 155 327 L 155 380" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+                <rect x="325" y="160" width="270" height="170" rx="12" fill="url(#bg-channel)" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6 4"/>
+                <text x="460" y="188" fill="#fbbf24" font-size="15" font-weight="700" text-anchor="middle">2. Transmission Channel</text>
+                <text x="460" y="208" fill="#d97706" font-size="11" font-weight="600" text-anchor="middle">Untrusted Network</text>
+                <rect x="345" y="222" width="230" height="42" rx="8" fill="#451a03" stroke="#f59e0b" stroke-width="1.5"/>
+                <text x="460" y="248" fill="#fef3c7" font-size="13" font-weight="600" text-anchor="middle">Payload in Transit (M || T)</text>
+                <rect x="345" y="278" width="230" height="34" rx="6" fill="#78350f" stroke="#d97706" stroke-width="1"/>
+                <text x="460" y="300" fill="#fde68a" font-size="11" text-anchor="middle">Attacker Interception Point</text>
+                <path d="M 270 406 L 310 406 L 310 243 L 345 243" fill="none" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrow-blue)"/>
+                <path d="M 575 243 L 610 243 L 610 91 L 645 91" fill="none" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow-amber)"/>
+
+                <rect x="630" y="20" width="270" height="450" rx="12" fill="url(#bg-receiver)" stroke="#10b981" stroke-width="2"/>
+                <text x="765" y="48" fill="#34d399" font-size="15" font-weight="700" text-anchor="middle">3. Receiver (MAC Verification)</text>
+                <rect x="650" y="70" width="230" height="42" rx="8" fill="#064e3b" stroke="#10b981" stroke-width="1.5"/>
+                <text x="765" y="96" fill="#a7f3d0" font-size="13" font-weight="600" text-anchor="middle">Received Payload (M' || T')</text>
+                <rect x="650" y="130" width="230" height="42" rx="8" fill="#334155" stroke="#fbbf24" stroke-width="1.5"/>
+                <text x="765" y="156" fill="#fef08a" font-size="13" font-weight="600" text-anchor="middle">Shared Secret Key (K)</text>
+                <rect x="650" y="200" width="230" height="55" rx="8" fill="url(#btn-green)" stroke="#34d399" stroke-width="1.5"/>
+                <text x="765" y="225" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">Recompute MAC Tag</text>
+                <text x="765" y="244" fill="#a7f3d0" font-size="11" text-anchor="middle">T'' = HMAC-SHA256(K, M')</text>
+                <rect x="650" y="285" width="230" height="48" rx="8" fill="#1e293b" stroke="#34d399" stroke-width="1.5"/>
+                <text x="765" y="306" fill="#f8fafc" font-size="12" font-weight="700" text-anchor="middle">Compare MAC Tags</text>
+                <text x="765" y="323" fill="#38bdf8" font-size="12" font-weight="600" text-anchor="middle">Is T'' equal to T' ?</text>
+                <rect x="650" y="380" width="110" height="52" rx="8" fill="#064e3b" stroke="#10b981" stroke-width="2"/>
+                <text x="705" y="402" fill="#34d399" font-size="12" font-weight="700" text-anchor="middle">MATCH</text>
+                <text x="705" y="420" fill="#a7f3d0" font-size="10" font-weight="600" text-anchor="middle">Authentic</text>
+                <rect x="770" y="380" width="110" height="52" rx="8" fill="#7f1d1d" stroke="#ef4444" stroke-width="2"/>
+                <text x="825" y="402" fill="#fca5a5" font-size="12" font-weight="700" text-anchor="middle">MISMATCH</text>
+                <text x="825" y="420" fill="#fecaca" font-size="10" font-weight="600" text-anchor="middle">Tampered!</text>
+                <path d="M 765 112 L 765 200" stroke="#10b981" stroke-width="2" marker-end="url(#arrow-green)"/>
+                <path d="M 765 172 L 765 200" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrow-amber)"/>
+                <path d="M 765 255 L 765 285" stroke="#10b981" stroke-width="2" marker-end="url(#arrow-green)"/>
+                <path d="M 710 333 L 710 380" stroke="#10b981" stroke-width="2" marker-end="url(#arrow-green)"/>
+                <path d="M 825 333 L 825 380" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow-red)"/>
+            </svg>
+        </section>
+
+        <section id="simulation" class="lab-section">
+            <span class="lab-section-tag">Simulation</span>
+            <h2 class="lab-section-title">Interactive MAC Lab</h2>
+            
+            <div class="lab-callout">
+                <strong>Sender (Alice):</strong> Enter a plaintext message and a secret key.
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+                <label for="sender-message">Message (M)</label>
+                <textarea id="sender-message" rows="2" spellcheck="false">Transfer $5,000 to Account #98412</textarea>
+                <label for="sender-key">Shared Secret Key (K)</label>
+                <input type="text" id="sender-key" value="mysecretkey123" spellcheck="false" autocomplete="off">
+            </div>
+
+            <button type="button" id="btnSenderGenerate">Generate MAC &amp; Send</button>
+
+            <div id="sender-error" style="display: none; color: red; margin-top: 10px;"></div>
+
+            <div id="sender-result" style="display: none; margin-top: 20px;">
+                <strong>Generated MAC Tag (T):</strong>
+                <div id="sender-tag-display" class="code-monitor" style="word-break: break-all;"></div>
+                <div style="margin-top: 10px;">
+                    <strong>Transmitted Payload (M || T):</strong>
+                    <div id="sender-transmitted" class="code-monitor" style="word-break: break-all;"></div>
+                </div>
+            </div>
+
+            <hr style="margin: 30px 0; border: 1px solid #18181b;">
+
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" id="attackerToggle">
+                <label for="attackerToggle"><strong>Simulate Attacker (Man-in-the-Middle)</strong></label>
+            </div>
+
+            <div id="sim-attacker-wrapper" style="display: none; margin-top: 20px; border: 2px dashed #c2410c; padding: 15px; border-radius: 8px;">
+                <div class="lab-callout">
+                    <strong>Attacker (Eve):</strong> Intercepts payload and modifies the message. Must generate a new MAC using a random key (since secret key is unknown).
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <strong>Intercepted Message:</strong> <span id="attacker-original-msg" class="code-monitor" style="padding: 4px;"></span>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <strong>Intercepted MAC:</strong> <span id="attacker-original-mac" class="code-monitor" style="padding: 4px;"></span>
+                </div>
+
+                <label for="attacker-modified-msg">Modified Message (M'):</label>
+                <textarea id="attacker-modified-msg" rows="2" spellcheck="false" style="width: 100%; margin-top: 5px;"></textarea>
+                
+                <div style="margin-top: 10px; display: flex; gap: 10px;">
+                    <button type="button" id="btnAttackerTamper">Tamper ($5,000 &rarr; $95,000)</button>
+                    <button type="button" id="btnAttackerForward">Forge MAC &amp; Forward</button>
+                </div>
+
+                <div id="attacker-forged-result" style="display: none; margin-top: 20px;">
+                    <strong>Attacker's Random Key:</strong>
+                    <div id="attacker-random-key" class="code-monitor"></div>
+                    <strong style="margin-top: 10px; display: block;">Forged MAC = HMAC(random key, M'):</strong>
+                    <div id="attacker-forged-mac" class="code-monitor" style="color: #ff7b72; word-break: break-all;"></div>
+                </div>
+            </div>
+
+            <hr style="margin: 30px 0; border: 1px solid #18181b;">
+
+            <div class="lab-callout">
+                <strong>Receiver (Bob):</strong> Receives payload, computes MAC using the shared key, and compares it with the received MAC.
+            </div>
+
+            <div style="margin-bottom: 10px;">
+                <strong>Received Message:</strong> <span id="receiver-got-msg" class="code-monitor" style="padding: 4px;">[Awaiting Transmission]</span>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <strong>Received MAC:</strong> <span id="receiver-got-mac" class="code-monitor" style="padding: 4px; word-break: break-all;">[Awaiting Transmission]</span>
+            </div>
+
+            <button type="button" id="btnReceiverVerify">Verify - Compute MAC(K, M) and Compare</button>
+
+            <div id="receiver-result" style="display: none; margin-top: 20px;">
+                <strong>Computed MAC using Shared Key K:</strong>
+                <div id="receiver-computed-mac" class="code-monitor" style="word-break: break-all;"></div>
+                <div id="receiver-verdict" style="margin-top: 15px; padding: 15px; border-radius: 8px; border: 2px solid #18181b;"></div>
+            </div>
+
+            <div id="sim-reset-area" style="display: none; margin-top: 20px;">
+                <button type="button" id="btnResetSim">Reset Simulation</button>
+            </div>
+        </section>
+
+        <section id="references" class="lab-section">
+            <span class="lab-section-tag">References</span>
+            <h2 class="lab-section-title">References &amp; Further Reading</h2>
+            <ul>
+                <li><a href="https://csrc.nist.gov/publications/detail/fips/198/1/final" target="_blank" rel="noopener">FIPS 198-1: The Keyed-Hash Message Authentication Code (HMAC)</a></li>
+                <li><a href="https://en.wikipedia.org/wiki/Message_authentication_code" target="_blank" rel="noopener">Wikipedia: Message authentication code</a></li>
+            </ul>
+        </section>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
